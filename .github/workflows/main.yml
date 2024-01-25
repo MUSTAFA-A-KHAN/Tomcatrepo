@@ -28,5 +28,5 @@ jobs:
           $env:Path = $env:Path + ';C:\Tomcat\apache-tomcat-10.0.12\bin'
           
           # Start Tomcat
-          Start-Process 'C:\Tomcat\apache-tomcat-10.0.12\bin\startup.bat' -PassThru | Wait-Process
+          Start-Process 'Tomcat\apache-tomcat-10.0.12\bin\startup.bat' -PassThru | Wait-Process
 
