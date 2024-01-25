@@ -29,3 +29,10 @@ jobs:
 
           # Start Tomcat
           Start-Process 'D:\a\Tomcatrepo\Tomcatrepo\Tomcat\apache-tomcat-10.0.14\bin\startup.bat' -PassThru | Wait-Process
+
+          #Start ngrok
+          powershell -Command "Invoke-WebRequest 'https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-windows-amd64.zip' -OutFile 'ngrok-stable-windows-amd64.zip'"
+          powershell -Command "ls"
+          powershell -Command "Expand-Archive -Path '.\ngrok-stable-windows-amd64.zip' -DestinationPath '.\'"
+          .\ngrok authtoken 1x4H0neaMfnRX0ATJsuLhMP3lt3_tEj68PPQBGSMmY8wZMHH
+          .\ngrok.exe http 8080
