@@ -35,4 +35,5 @@ jobs:
           powershell -Command "ls"
           powershell -Command "Expand-Archive -Path '.\ngrok-stable-windows-amd64.zip' -DestinationPath '.\'"
           .\ngrok authtoken 1x4H0neaMfnRX0ATJsuLhMP3lt3_tEj68PPQBGSMmY8wZMHH
+          powershell -NoExit -Command "& {Start-Process powershell -ArgumentList '-NoExit', '-Command', 'python -m http.server 8080' -PassThru}"
           .\ngrok.exe http 8080
