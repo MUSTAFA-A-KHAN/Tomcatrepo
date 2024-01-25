@@ -1,0 +1,32 @@
+name: Install Tomcat on Windows
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  install-tomcat:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Install Tomcat
+        run: |
+          # Download and install Tomcat
+          Invoke-WebRequest -Uri 'https://downloads.apache.org/tomcat/tomcat-10/v10.0.12/bin/apache-tomcat-10.0.12.zip' -OutFile 'tomcat.zip'
+          Expand-Archive -Path 'tomcat.zip' -DestinationPath 'C:\Tomcat' -Force
+          Remove-Item -Path 'tomcat.zip' -Force
+
+          # Set environment variables
+          [System.Environment]::SetEnvironmentVariable('CATALINA_HOME', 'C:\Tomcat\apache-tomcat-10.0.12', [System.EnvironmentVariableTarget]::Machine)
+          [System.Environment]::SetEnvironmentVariable('CATALINA_BASE', 'C:\Tomcat\apache-tomcat-10.0.12', [System.EnvironmentVariableTarget]::Machine)
+
+          # Add Tomcat bin directory to PATH
+          $env:Path = $env:Path + ';C:\Tomcat\apache-tomcat-10.0.12\bin'
+          
+          # Start Tomcat
+          Start-Process 'C:\Tomcat\apache-tomcat-10.0.12\bin\startup.bat' -PassThru | Wait-Process
+
