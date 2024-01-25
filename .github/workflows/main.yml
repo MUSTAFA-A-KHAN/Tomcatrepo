@@ -16,7 +16,7 @@ jobs:
       - name: Install Tomcat
         run: |
           # Download and install Tomcat
-          Invoke-WebRequest -Uri 'https://downloads.apache.org/tomcat/tomcat-10/v10.0.12/bin/apache-tomcat-10.0.12.zip' -OutFile 'tomcat.zip'
+          Invoke-WebRequest -Uri 'https://archive.apache.org/dist/tomcat/tomcat-10/v10.0.14/bin/apache-tomcat-10.0.14.zip' -OutFile 'tomcat.zip'
           Expand-Archive -Path 'tomcat.zip' -DestinationPath 'C:\Tomcat' -Force
           Remove-Item -Path 'tomcat.zip' -Force
 
