@@ -34,6 +34,7 @@ jobs:
           powershell -Command "Invoke-WebRequest 'https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-windows-amd64.zip' -OutFile 'ngrok-stable-windows-amd64.zip'"
           powershell -Command "ls"
           powershell -Command "Expand-Archive -Path '.\ngrok-stable-windows-amd64.zip' -DestinationPath '.\'"
+          java --version
           .\ngrok authtoken 1x4H0neaMfnRX0ATJsuLhMP3lt3_tEj68PPQBGSMmY8wZMHH
           powershell -NoExit -Command "& {Start-Process powershell -ArgumentList '-NoExit', '-Command', 'python -m http.server 8080' -PassThru}"
           .\ngrok.exe http 8080
