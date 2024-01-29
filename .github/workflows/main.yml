@@ -41,6 +41,8 @@ jobs:
 
       - name: Start Tomcat
         run: |
+          ls
+          sh Tomcat/
           sh $env:CATALINA_HOME/bin/startup.sh
           sleep 30  # Increased sleep time
 
