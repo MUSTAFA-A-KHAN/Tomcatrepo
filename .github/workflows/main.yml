@@ -31,6 +31,8 @@ jobs:
 
           # Add Tomcat bin directory to PATH
           export PATH=$PATH:$env:CATALINA_HOME/bin
+          ls
+          
 
       - name: Debug Info
         run: |
