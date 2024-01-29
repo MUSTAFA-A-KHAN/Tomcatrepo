@@ -10,7 +10,7 @@ jobs:
     runs-on: windows-latest
 
     env:
-      CATALINA_HOME: ${{ env.SYSTEM_DEFAULTWORKINGDIRECTORY }}\a\Tomcatrepo\Tomcatrepo\Tomcat\apache-tomcat-10.0.14
+      CATALINA_HOME: ${{ github.workspace }}\a\Tomcatrepo\Tomcatrepo\Tomcat\apache-tomcat-10.0.14
 
     steps:
       - name: Checkout Repository
@@ -38,7 +38,10 @@ jobs:
       - name: Start Tomcat
         run: |
           Start-Process "$env:CATALINA_HOME\bin\startup.bat" -NoNewWindow
-          Start-Sleep -Seconds 10
+          Start-Sleep -Seconds 30  # Increased sleep time
+
+      - name: Display Tomcat Logs
+        run: Get-Content "$env:CATALINA_HOME\logs\catalina.out"
 
       - name: Wait for Tomcat to start
         run: |
@@ -69,5 +72,5 @@ jobs:
           Invoke-WebRequest 'https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-windows-amd64.zip' -OutFile 'ngrok-stable-windows-amd64.zip'
           Expand-Archive -Path '.\ngrok-stable-windows-amd64.zip' -DestinationPath '.\'
           java -version
-          .\ngrok authtoken 1x4H0neaMfnRX0ATJsuLhMP3lt3_tEj68PPQBGSMmY8wZMHH
+          .\ngrok authtoken 1x4H0neaMfnRX0ATJsuLhMP3lt3_tEj68PPQBGSMmY8wMHH
           .\ngrok.exe http 8080  # Change 8080 to the Tomcat port you want to expose
