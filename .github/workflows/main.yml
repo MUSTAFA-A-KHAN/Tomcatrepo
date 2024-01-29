@@ -39,7 +39,7 @@ jobs:
 
           # Start Tomcat
           Start-Process "$env:SYSTEM_DEFAULTWORKINGDIRECTORY\a\Tomcatrepo\Tomcatrepo\Tomcat\apache-tomcat-10.0.14\bin\startup.bat" -PassThru | Wait-Process
-
+          $env:SYSTEM_DEFAULTWORKINGDIRECTORY\a\Tomcatrepo\Tomcatrepo\Tomcat\apache-tomcat-10.0.14\bin\startup.bat
       - name: Wait for Tomcat to start
         run: |
           $url = 'http://localhost:8080/'
