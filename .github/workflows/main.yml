@@ -50,7 +50,7 @@ jobs:
           while ($attempts -lt $maxAttempts) {
               try {
                   set CATALINA_HOME=D:\a\Tomcatrepo\Tomcatrepo\Tomcat\apache-tomcat-10.0.14
-                  cmd.exe
+                  refreshenv
                   echo %CATALINA_HOME%
                   echo $CATALINA_HOME
                   D:\a\Tomcatrepo\Tomcatrepo\Tomcat\apache-tomcat-10.0.14\bin\startup.bat
