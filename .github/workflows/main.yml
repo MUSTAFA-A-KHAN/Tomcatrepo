@@ -33,7 +33,8 @@ jobs:
           # Start Tomcat
           Start-Process 'D:\a\Tomcatrepo\Tomcatrepo\Tomcat\apache-tomcat-10.0.14\bin\startup.bat' -PassThru | Wait-Process
           cmd
-          %CATALINA_HOME%\bin\catalina.bat start
+          echo %CATALINA_HOME%
+          D:\a\Tomcatrepo\Tomcatrepo\Tomcat\apache-tomcat-10.0.14\bin\catalina.bat start
           
       - name: Wait for Tomcat to start
         run: |
