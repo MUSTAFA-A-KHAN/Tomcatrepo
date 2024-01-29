@@ -9,37 +9,37 @@ jobs:
   install-tomcat:
     runs-on: windows-latest
 
+    env:
+      CATALINA_HOME: ${{ env.SYSTEM_DEFAULTWORKINGDIRECTORY }}\a\Tomcatrepo\Tomcatrepo\Tomcat\apache-tomcat-10.0.14
+
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
+
+      - name: Set up Chocolatey environment (if needed)
+        run: |
+          Import-Module $env:ChocolateyInstall\helpers\chocolateyProfile.psm1
 
       - name: Download and Install Tomcat
         run: |
           # Download and install Tomcat
           Invoke-WebRequest -Uri 'https://archive.apache.org/dist/tomcat/tomcat-10/v10.0.14/bin/apache-tomcat-10.0.14.zip' -OutFile 'tomcat.zip'
-          Expand-Archive -Path 'tomcat.zip' -DestinationPath 'D:\a\Tomcatrepo\Tomcatrepo\Tomcat' -Force
+          Expand-Archive -Path 'tomcat.zip' -DestinationPath $env:CATALINA_HOME -Force
           Remove-Item -Path 'tomcat.zip' -Force
 
-          # Set environment variables
-          [System.Environment]::SetEnvironmentVariable('CATALINA_HOME', "$env:SYSTEM_DEFAULTWORKINGDIRECTORY\a\Tomcatrepo\Tomcatrepo\Tomcat\apache-tomcat-10.0.14", [System.EnvironmentVariableTarget]::Machine)
-          [System.Environment]::SetEnvironmentVariable('CATALINA_BASE', "$env:SYSTEM_DEFAULTWORKINGDIRECTORY\a\Tomcatrepo\Tomcatrepo\Tomcat\apache-tomcat-10.0.14", [System.EnvironmentVariableTarget]::Machine)
-
           # Add Tomcat bin directory to PATH
-          $env:Path = $env:Path + ";$env:SYSTEM_DEFAULTWORKINGDIRECTORY\a\Tomcatrepo\Tomcatrepo\Tomcat\apache-tomcat-10.0.14\bin"
+          $env:Path = $env:Path + ";$env:CATALINA_HOME\bin"
 
-          # Debugging: Print environment variables and paths
+      - name: Debug Info
+        run: |
           Get-ChildItem Env:
-          Get-ChildItem "$env:SYSTEM_DEFAULTWORKINGDIRECTORY\a\Tomcatrepo\Tomcatrepo\Tomcat" -Recurse
+          Get-ChildItem $env:CATALINA_HOME -Recurse
 
-          # Debugging: List Directory Contents
-          Get-ChildItem "$env:SYSTEM_DEFAULTWORKINGDIRECTORY\a\Tomcatrepo\Tomcatrepo\Tomcat\apache-tomcat-10.0.14" -Recurse
+      - name: Start Tomcat
+        run: |
+          Start-Process "$env:CATALINA_HOME\bin\startup.bat" -NoNewWindow
+          Start-Sleep -Seconds 10
 
-          # Replace the server.xml content
-          (Get-Content "$env:SYSTEM_DEFAULTWORKINGDIRECTORY\a\Tomcatrepo\Tomcatrepo\Tomcat\apache-tomcat-10.0.14\conf\server.xml" -Raw) -replace '<Connector port="8080" protocol="HTTP/1.1" connectionTimeout="20000" redirectPort="8443"/>', '<Connector port="8080" protocol="HTTP/1.1" address="0.0.0.0" connectionTimeout="20000" redirectPort="8443"/>' | Set-Content "$env:SYSTEM_DEFAULTWORKINGDIRECTORY\a\Tomcatrepo\Tomcatrepo\Tomcat\apache-tomcat-10.0.14\conf\server.xml"
-
-          # Start Tomcat
-          Start-Process "$env:SYSTEM_DEFAULTWORKINGDIRECTORY\a\Tomcatrepo\Tomcatrepo\Tomcat\apache-tomcat-10.0.14\bin\startup.bat" -PassThru | Wait-Process
-          D:\a\Tomcatrepo\Tomcatrepo\Tomcat\apache-tomcat-10.0.14\bin\startup.bat
       - name: Wait for Tomcat to start
         run: |
           $url = 'http://localhost:8080/'
@@ -49,11 +49,6 @@ jobs:
           # Wait for Tomcat to start by checking if it responds to HTTP requests
           while ($attempts -lt $maxAttempts) {
               try {
-                  set CATALINA_HOME=D:\a\Tomcatrepo\Tomcatrepo\Tomcat\apache-tomcat-10.0.14
-                  Invoke-Expression -Command "refreshenv"
-                  echo %CATALINA_HOME%
-                  echo $CATALINA_HOME
-                  D:\a\Tomcatrepo\Tomcatrepo\Tomcat\apache-tomcat-10.0.14\bin\startup.bat
                   Invoke-WebRequest -Uri $url -UseBasicParsing -TimeoutSec 5
                   Write-Host "Tomcat has started successfully."
                   break
