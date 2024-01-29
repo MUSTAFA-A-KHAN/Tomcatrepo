@@ -29,7 +29,7 @@ jobs:
 
           # Replace the server.xml content
           (Get-Content 'D:\a\Tomcatrepo\Tomcatrepo\Tomcat\apache-tomcat-10.0.14\conf\server.xml' -Raw) -replace '<Connector port="8080" protocol="HTTP/1.1" connectionTimeout="20000" redirectPort="8443"/>', '<Connector port="8080" protocol="HTTP/1.1" address="0.0.0.0" connectionTimeout="20000" redirectPort="8443"/>' | Set-Content 'D:\a\Tomcatrepo\Tomcatrepo\Tomcat\apache-tomcat-10.0.14\conf\server.xml'
-
+          set CATALINA_HOME=D:\a\Tomcatrepo\Tomcatrepo\Tomcat\apache-tomcat-10.0.14
           # Start Tomcat
           Start-Process 'D:\a\Tomcatrepo\Tomcatrepo\Tomcat\apache-tomcat-10.0.14\bin\startup.bat' -PassThru | Wait-Process
           cmd
