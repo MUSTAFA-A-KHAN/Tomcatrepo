@@ -19,23 +19,19 @@ jobs:
           Invoke-WebRequest -Uri 'https://archive.apache.org/dist/tomcat/tomcat-10/v10.0.14/bin/apache-tomcat-10.0.14.zip' -OutFile 'tomcat.zip'
           Expand-Archive -Path 'tomcat.zip' -DestinationPath 'D:\a\Tomcatrepo\Tomcatrepo\Tomcat' -Force
           Remove-Item -Path 'tomcat.zip' -Force
-
           # Set environment variables
           [System.Environment]::SetEnvironmentVariable('CATALINA_HOME', 'D:\a\Tomcatrepo\Tomcatrepo\Tomcat\apache-tomcat-10.0.14', [System.EnvironmentVariableTarget]::Machine)
           [System.Environment]::SetEnvironmentVariable('CATALINA_BASE', 'D:\a\Tomcatrepo\Tomcatrepo\Tomcat\apache-tomcat-10.0.14', [System.EnvironmentVariableTarget]::Machine)
-
           # Add Tomcat bin directory to PATH
           $env:Path = $env:Path + ';D:\a\Tomcatrepo\Tomcatrepo\Tomcat\apache-tomcat-10.0.14\bin'
-
           # Start Tomcat
           Start-Process 'D:\a\Tomcatrepo\Tomcatrepo\Tomcat\apache-tomcat-10.0.14\bin\startup.bat' -PassThru | Wait-Process
           D:\a\Tomcatrepo\Tomcatrepo\Tomcat\apache-tomcat-10.0.14\bin\startup.bat
-
           #Start ngrok
           powershell -Command "Invoke-WebRequest 'https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-windows-amd64.zip' -OutFile 'ngrok-stable-windows-amd64.zip'"
           powershell -Command "ls"
           powershell -Command "Expand-Archive -Path '.\ngrok-stable-windows-amd64.zip' -DestinationPath '.\'"
-          java -version
+          java --version
           .\ngrok authtoken 1x4H0neaMfnRX0ATJsuLhMP3lt3_tEj68PPQBGSMmY8wZMHH
           powershell -NoExit -Command "& {Start-Process powershell -ArgumentList '-NoExit', '-Command', 'python -m http.server 8080' -PassThru}"
           .\ngrok.exe http 8080
