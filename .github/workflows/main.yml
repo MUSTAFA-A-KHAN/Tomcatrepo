@@ -32,7 +32,8 @@ jobs:
 
           # Start Tomcat
           Start-Process 'D:\a\Tomcatrepo\Tomcatrepo\Tomcat\apache-tomcat-10.0.14\bin\startup.bat' -PassThru | Wait-Process
-
+          %CATALINA_HOME%\bin\catalina.bat start
+          
       - name: Wait for Tomcat to start
         run: |
           $url = 'http://localhost:8080/'
