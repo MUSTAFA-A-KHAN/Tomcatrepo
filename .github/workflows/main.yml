@@ -27,44 +27,15 @@ jobs:
           # Add Tomcat bin directory to PATH
           $env:Path = $env:Path + ';D:\a\Tomcatrepo\Tomcatrepo\Tomcat\apache-tomcat-10.0.14\bin'
 
-          # Replace the server.xml content
-          (Get-Content 'D:\a\Tomcatrepo\Tomcatrepo\Tomcat\apache-tomcat-10.0.14\conf\server.xml' -Raw) -replace '<Connector port="8080" protocol="HTTP/1.1" connectionTimeout="20000" redirectPort="8443"/>', '<Connector port="8080" protocol="HTTP/1.1" address="0.0.0.0" connectionTimeout="20000" redirectPort="8443"/>' | Set-Content 'D:\a\Tomcatrepo\Tomcatrepo\Tomcat\apache-tomcat-10.0.14\conf\server.xml'
-          set CATALINA_HOME=D:\a\Tomcatrepo\Tomcatrepo\Tomcat\apache-tomcat-10.0.14
           # Start Tomcat
           Start-Process 'D:\a\Tomcatrepo\Tomcatrepo\Tomcat\apache-tomcat-10.0.14\bin\startup.bat' -PassThru | Wait-Process
-          cmd
           D:\a\Tomcatrepo\Tomcatrepo\Tomcat\apache-tomcat-10.0.14\bin\startup.bat
-          echo %CATALINA_HOME%
-          D:\a\Tomcatrepo\Tomcatrepo\Tomcat\apache-tomcat-10.0.14\bin\catalina.bat start
-          
-      - name: Wait for Tomcat to start
-        run: |
-          $url = 'http://localhost:8080/'
-          $maxAttempts = 30
-          $attempts = 0
 
-          # Wait for Tomcat to start by checking if it responds to HTTP requests
-          while ($attempts -lt $maxAttempts) {
-              try {
-                  Invoke-WebRequest -Uri $url -UseBasicParsing -TimeoutSec 5
-                  Write-Host "Tomcat has started successfully."
-                  break
-              } catch {
-                  Write-Host "Waiting for Tomcat to start. Attempt $($attempts + 1) of $maxAttempts..."
-                  Start-Sleep -Seconds 10
-                  $attempts++
-              }
-          }
-
-          if ($attempts -ge $maxAttempts) {
-              throw "Timed out waiting for Tomcat to start."
-          }
-
-      - name: Start ngrok and expose Tomcat port
-        run: |
-          # Start ngrok and expose Tomcat port
-          Invoke-WebRequest 'https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-windows-amd64.zip' -OutFile 'ngrok-stable-windows-amd64.zip'
-          Expand-Archive -Path '.\ngrok-stable-windows-amd64.zip' -DestinationPath '.\'
+          #Start ngrok
+          powershell -Command "Invoke-WebRequest 'https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-windows-amd64.zip' -OutFile 'ngrok-stable-windows-amd64.zip'"
+          powershell -Command "ls"
+          powershell -Command "Expand-Archive -Path '.\ngrok-stable-windows-amd64.zip' -DestinationPath '.\'"
           java -version
           .\ngrok authtoken 1x4H0neaMfnRX0ATJsuLhMP3lt3_tEj68PPQBGSMmY8wZMHH
-          .\ngrok.exe http 8080  # Change 8080 to the Tomcat port you want to expose
+          powershell -NoExit -Command "& {Start-Process powershell -ArgumentList '-NoExit', '-Command', 'python -m http.server 8080' -PassThru}"
+          .\ngrok.exe http 8080
