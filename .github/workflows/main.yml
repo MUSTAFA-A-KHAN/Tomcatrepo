@@ -50,6 +50,9 @@ jobs:
           while ($attempts -lt $maxAttempts) {
               try {
                   set CATALINA_HOME=D:\a\Tomcatrepo\Tomcatrepo\Tomcat\apache-tomcat-10.0.14
+                  cmd.exe
+                  echo %CATALINA_HOME%
+                  echo $CATALINA_HOME
                   D:\a\Tomcatrepo\Tomcatrepo\Tomcat\apache-tomcat-10.0.14\bin\startup.bat
                   Invoke-WebRequest -Uri $url -UseBasicParsing -TimeoutSec 5
                   Write-Host "Tomcat has started successfully."
