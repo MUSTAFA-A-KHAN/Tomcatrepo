@@ -1,4 +1,4 @@
-name: Install Tomcat on Linux
+name: Install Tomcat on Windows
 
 on:
   push:
@@ -7,80 +7,67 @@ on:
 
 jobs:
   install-tomcat:
-    runs-on: ubuntu-latest
-
-    env:
-      CATALINA_HOME: ${{ github.workspace }}/a/Tomcatrepo/Tomcatrepo/Tomcat/apache-tomcat-10.0.14
+    runs-on: windows-latest
 
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
 
-      - name: Set up Chocolatey environment (if needed)
-        run: |
-          # If Chocolatey is not needed, you can remove this step
-          echo "Chocolatey setup is not required on Linux."
-
       - name: Download and Install Tomcat
         run: |
           # Download and install Tomcat
-          mkdir -p $env:CATALINA_HOME
-          wget -O tomcat.tar.gz 'https://archive.apache.org/dist/tomcat/tomcat-10/v10.0.14/bin/apache-tomcat-10.0.14.tar.gz'
-          tar -xzf tomcat.tar.gz -C $env:CATALINA_HOME --strip-components=1
-          rm tomcat.tar.gz
-
+          Invoke-WebRequest -Uri 'https://archive.apache.org/dist/tomcat/tomcat-10/v10.0.14/bin/apache-tomcat-10.0.14.zip' -OutFile 'tomcat.zip'
+          Expand-Archive -Path 'tomcat.zip' -DestinationPath 'D:\a\Tomcatrepo\Tomcatrepo\Tomcat' -Force
+          Remove-Item -Path 'tomcat.zip' -Force
+          # Set environment variables
+          [System.Environment]::SetEnvironmentVariable('CATALINA_HOME', "$env:SYSTEM_DEFAULTWORKINGDIRECTORY\a\Tomcatrepo\Tomcatrepo\Tomcat\apache-tomcat-10.0.14", [System.EnvironmentVariableTarget]::Machine)
+          [System.Environment]::SetEnvironmentVariable('CATALINA_BASE', "$env:SYSTEM_DEFAULTWORKINGDIRECTORY\a\Tomcatrepo\Tomcatrepo\Tomcat\apache-tomcat-10.0.14", [System.EnvironmentVariableTarget]::Machine)
           # Add Tomcat bin directory to PATH
-          export PATH=$PATH:$env:CATALINA_HOME/bin
-          ls
-          
+          $env:Path = $env:Path + ";$env:SYSTEM_DEFAULTWORKINGDIRECTORY\a\Tomcatrepo\Tomcatrepo\Tomcat\apache-tomcat-10.0.14\bin"
+          # Debugging: Print environment variables and paths
+          Get-ChildItem Env:
+          Get-ChildItem "$env:SYSTEM_DEFAULTWORKINGDIRECTORY\a\Tomcatrepo\Tomcatrepo\Tomcat" -Recurse
+          # Debugging: List Directory Contents
+          Get-ChildItem "$env:SYSTEM_DEFAULTWORKINGDIRECTORY\a\Tomcatrepo\Tomcatrepo\Tomcat\apache-tomcat-10.0.14" -Recurse
+          # Replace the server.xml content
+          (Get-Content "$env:SYSTEM_DEFAULTWORKINGDIRECTORY\a\Tomcatrepo\Tomcatrepo\Tomcat\apache-tomcat-10.0.14\conf\server.xml" -Raw) -replace '<Connector port="8080" protocol="HTTP/1.1" connectionTimeout="20000" redirectPort="8443"/>', '<Connector port="8080" protocol="HTTP/1.1" address="0.0.0.0" connectionTimeout="20000" redirectPort="8443"/>' | Set-Content "$env:SYSTEM_DEFAULTWORKINGDIRECTORY\Tomcatrepo\Tomcatrepo\Tomcat\apache-tomcat-10.0.14\conf\server.xml"
+          # Start Tomcat
+          Start-Process "$env:SYSTEM_DEFAULTWORKINGDIRECTORY\a\Tomcatrepo\Tomcatrepo\Tomcat\apache-tomcat-10.0.14\bin\startup.bat" -PassThru | Wait-Process
+          $env:SYSTEM_DEFAULTWORKINGDIRECTORY\a\Tomcatrepo\Tomcatrepo\Tomcat\apache-tomcat-10.0.14\bin\startup.bat
 
-      - name: Debug Info
+      - name: Set Environment Variables using batch script
         run: |
-          printenv
-          ls -R $env:CATALINA_HOME
-
-      - name: Start Tomcat
-        run: |
-          ls
-          pwd
-          ls
-          ls
-          ls
-          ls
-          sh $env:CATALINA_HOME/bin/startup.sh
-          sleep 30  # Increased sleep time
-
-      - name: Display Tomcat Logs
-        run: cat $env:CATALINA_HOME/logs/catalina.out
+          echo set "CATALINA_HOME=%CD%\Tomcatrepo\Tomcatrepo\Tomcat\apache-tomcat-10.0.14" >> setenv.bat
+          echo set "CATALINA_BASE=%CD%\Tomcatrepo\Tomcatrepo\Tomcat\apache-tomcat-10.0.14" >> setenv.bat
+          echo set "PATH=%PATH%;%CD%\Tomcatrepo\Tomcatrepo\Tomcat\apache-tomcat-10.0.14\bin" >> setenv.bat
+          call setenv.bat
 
       - name: Wait for Tomcat to start
         run: |
-          url='http://localhost:8080/'
-          max_attempts=30
-          attempts=0
-
+          $url = 'http://localhost:8080/'
+          $maxAttempts = 30
+          $attempts = 0
           # Wait for Tomcat to start by checking if it responds to HTTP requests
-          while [ $attempts -lt $max_attempts ]; do
-              if curl --output /dev/null --silent --head --fail $url; then
-                  echo "Tomcat has started successfully."
+          while ($attempts -lt $maxAttempts) {
+              try {
+                  Invoke-WebRequest -Uri $url -UseBasicParsing -TimeoutSec 5
+                  Write-Host "Tomcat has started successfully."
                   break
-              else
-                  echo "Waiting for Tomcat to start. Attempt $((attempts + 1)) of $max_attempts..."
-                  sleep 10
-                  ((attempts++))
-              fi
-          done
-
-          if [ $attempts -ge $max_attempts ]; then
-              echo "Timed out waiting for Tomcat to start."
-              exit 1
-          fi
+              } catch {
+                  Write-Host "Waiting for Tomcat to start. Attempt $($attempts + 1) of $maxAttempts..."
+                  Start-Sleep -Seconds 10
+                  $attempts++
+              }
+          }
+          if ($attempts -ge $maxAttempts) {
+              throw "Timed out waiting for Tomcat to start."
+          }
 
       - name: Start ngrok and expose Tomcat port
         run: |
           # Start ngrok and expose Tomcat port
-          wget 'https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.zip'
-          unzip ngrok-stable-linux-amd64.zip
+          Invoke-WebRequest 'https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-windows-amd64.zip' -OutFile 'ngrok-stable-windows-amd64.zip'
+          Expand-Archive -Path '.\ngrok-stable-windows-amd64.zip' -DestinationPath '.\'
           java -version
-          ./ngrok authtoken 1x4H0neaMfnRX0ATJsuLhMP3lt3_tEj68PPQBGSMmY8wMHH
-          ./ngrok http 8080  # Change 8080 to the Tomcat port you want to expose
+          .\ngrok authtoken 1x4H0neaMfnRX0ATJsuLhMP3lt3_tEj68PPQBGSMmY8wZMHH
+          .\ngrok.exe http 8080
