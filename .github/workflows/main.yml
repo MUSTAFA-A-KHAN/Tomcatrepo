@@ -54,6 +54,8 @@ jobs:
           $maxAttempts = 10
           $attempts = 0
           .\setenv.bat
+          %CATALINA_HOME%
+          ecgo '%CATALINA_HOME%'
           # Wait for Tomcat to start by checking if it responds to HTTP requests
           while ($attempts -lt $maxAttempts) {
               try {
