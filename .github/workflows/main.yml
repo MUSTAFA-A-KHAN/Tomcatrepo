@@ -4,7 +4,9 @@ on:
   push:
     branches:
       - main
-
+env:
+  CATALINA_HOME: %CD%\Tomcatrepo\Tomcatrepo\Tomcat\apache-tomcat-10.0.14
+  
 jobs:
   install-tomcat:
     runs-on: windows-latest
@@ -16,6 +18,7 @@ jobs:
       - name: Download and Install Tomcat
         run: |
           # Download and install Tomcat
+          
           Invoke-WebRequest -Uri 'https://archive.apache.org/dist/tomcat/tomcat-10/v10.0.14/bin/apache-tomcat-10.0.14.zip' -OutFile 'tomcat.zip'
           Expand-Archive -Path 'tomcat.zip' -DestinationPath 'D:\a\Tomcatrepo\Tomcatrepo\Tomcat' -Force
           Remove-Item -Path 'tomcat.zip' -Force
