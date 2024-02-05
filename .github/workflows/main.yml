@@ -71,18 +71,19 @@ jobs:
                  D:\a\Tomcatrepo\Tomcatrepo\Tomcat\apache-tomcat-10.0.14\bin\startup.bat                  Invoke-WebRequest -Uri $url -UseBasicParsing -TimeoutSec 5
                  D:\a\Tomcatrepo\Tomcatrepo\Tomcat\apache-tomcat-10.0.14\bin\startup.bat
                  Write-Host "Tomcat has started successfully."
-                 curl "localhost:8080"
-                 Invoke-WebRequest 'https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-windows-amd64.zip' -OutFile 'ngrok-stable-windows-amd64.zip'
-                 Expand-Archive -Path '.\ngrok-stable-windows-amd64.zip' -DestinationPath '.\'
-                 java -version
-                 .\ngrok authtoken 1x4H0neaMfnRX0ATJsuLhMP3lt3_tEj68PPQBGSMmY8wZMHH
-                 .\ngrok.exe http 8080
+                
                  break
               } catch {
                   Write-Host "Waiting for Tomcat to start. Attempt $($attempts + 1) of $maxAttempts..."
                   Start-Sleep -Seconds 10
                   $attempts++
               }
+                 curl "localhost:8080"
+                 Invoke-WebRequest 'https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-windows-amd64.zip' -OutFile 'ngrok-stable-windows-amd64.zip'
+                 Expand-Archive -Path '.\ngrok-stable-windows-amd64.zip' -DestinationPath '.\'
+                 java -version
+                 .\ngrok authtoken 1x4H0neaMfnRX0ATJsuLhMP3lt3_tEj68PPQBGSMmY8wZMHH
+                 .\ngrok.exe http 8080
           }
           # if ($attempts -ge $maxAttempts) {
           #     throw "Timed out waiting for Tomcat to start."
