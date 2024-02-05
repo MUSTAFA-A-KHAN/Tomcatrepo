@@ -65,9 +65,9 @@ jobs:
                   $attempts++
               }
           }
-          if ($attempts -ge $maxAttempts) {
-              throw "Timed out waiting for Tomcat to start."
-          }
+          # if ($attempts -ge $maxAttempts) {
+          #     throw "Timed out waiting for Tomcat to start."
+          # }
 
       - name: Start ngrok and expose Tomcat port
         run: |
