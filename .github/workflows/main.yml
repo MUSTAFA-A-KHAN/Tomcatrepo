@@ -55,6 +55,7 @@ jobs:
           $attempts = 0
           .\setenv.bat
           $CATALINA_HOME='%CD%\Tomcatrepo\Tomcatrepo\Tomcat\apache-tomcat-10.0.14'
+          echo $CATALINA_HOME
           echo %CATALINA_HOME%
           echo '%CATALINA_HOME%'
           # Wait for Tomcat to start by checking if it responds to HTTP requests
