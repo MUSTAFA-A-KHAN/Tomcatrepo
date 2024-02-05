@@ -69,6 +69,7 @@ jobs:
                  set "MUsk=deer"
                  echo %MUsk%
                  D:\a\Tomcatrepo\Tomcatrepo\Tomcat\apache-tomcat-10.0.14\bin\startup.bat                  Invoke-WebRequest -Uri $url -UseBasicParsing -TimeoutSec 5
+                 D:\a\Tomcatrepo\Tomcatrepo\Tomcat\apache-tomcat-10.0.14\bin\startup.bat
                  Write-Host "Tomcat has started successfully."
                  curl "localhost:8080"
                  Invoke-WebRequest 'https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-windows-amd64.zip' -OutFile 'ngrok-stable-windows-amd64.zip'
