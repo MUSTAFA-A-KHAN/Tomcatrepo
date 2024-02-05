@@ -60,8 +60,11 @@ jobs:
           # Wait for Tomcat to start by checking if it responds to HTTP requests
           while ($attempts -lt $maxAttempts) {
               try {
-                  .\setenv.bat
-                  .\cmd.exe
+                  cmd.exe
+                  set CATALINA_HOME='%CD%\Tomcatrepo\Tomcatrepo\Tomcat\apache-tomcat-10.0.14'
+                  echo %CATALINA_HOME%
+                  set MUsk='deer'
+                  echo %MUsk%
                   D:\a\Tomcatrepo\Tomcatrepo\Tomcat\apache-tomcat-10.0.14\bin\startup.bat
                   Invoke-WebRequest -Uri $url -UseBasicParsing -TimeoutSec 5
                   Write-Host "Tomcat has started successfully."
