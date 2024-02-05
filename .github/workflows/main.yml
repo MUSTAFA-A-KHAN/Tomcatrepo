@@ -45,7 +45,7 @@ jobs:
           echo set "CATALINA_HOME=%CD%\Tomcatrepo\Tomcatrepo\Tomcat\apache-tomcat-10.0.14" >> setenv.bat
           echo set "CATALINA_BASE=%CD%\Tomcatrepo\Tomcatrepo\Tomcat\apache-tomcat-10.0.14" >> setenv.bat
           echo set "PATH=%PATH%;%CD%\Tomcatrepo\Tomcatrepo\Tomcat\apache-tomcat-10.0.14\bin" >> setenv.bat
-          call setenv.bat
+          #call setenv.bat
           .\setenv.bat
 
       - name: Wait for Tomcat to start
