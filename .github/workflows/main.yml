@@ -5,7 +5,7 @@ on:
     branches:
       - main
 env:
-  CATALINA_HOME: %CD%\Tomcatrepo\Tomcatrepo\Tomcat\apache-tomcat-10.0.14
+  CATALINA_HOME: D:\a\Tomcatrepo\Tomcatrepo\Tomcat\apache-tomcat-10.0.14
   
 jobs:
   install-tomcat:
