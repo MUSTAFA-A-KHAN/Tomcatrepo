@@ -51,7 +51,7 @@ jobs:
       - name: Wait for Tomcat to start
         run: |
           $url = 'http://localhost:8080/'
-          $maxAttempts = 30
+          $maxAttempts = 10
           $attempts = 0
           # Wait for Tomcat to start by checking if it responds to HTTP requests
           while ($attempts -lt $maxAttempts) {
