@@ -62,7 +62,7 @@ jobs:
           while ($attempts -lt $maxAttempts) {
               try {
                   cmd.exe
-                  set CATALINA_HOME='%CD%\Tomcatrepo\Tomcatrepo\Tomcat\apache-tomcat-10.0.14'
+                  set "CATALINA_HOME=%CD%\Tomcatrepo\Tomcatrepo\Tomcat\apache-tomcat-10.0.14"
                   echo %CATALINA_HOME%
                   set MUsk='deer'
                   cmd.exe
