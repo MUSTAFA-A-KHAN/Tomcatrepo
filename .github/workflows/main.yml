@@ -50,7 +50,7 @@ jobs:
           echo set "PATH=%PATH%;%CD%\Tomcatrepo\Tomcatrepo\Tomcat\apache-tomcat-10.0.14\bin" >> setenv.bat
           #call setenv.bat
           .\setenv.bat
-
+    
       - name: Wait for Tomcat to start
         run: |
           $url = 'http://localhost:8080/'
