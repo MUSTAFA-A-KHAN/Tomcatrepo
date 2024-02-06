@@ -1,4 +1,4 @@
-name: Install and Run httpd
+name: Install and Run httpd with ngrok
 
 on: [push, pull_request]
 
@@ -23,5 +23,15 @@ jobs:
 
     - name: Display Apache status
       run: sudo service apache2 status
+
+    - name: Download and extract ngrok
+      run: |
+        wget https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.zip
+        unzip ngrok-stable-linux-amd64.zip
+
+    - name: Start ngrok and expose Apache port
+      run: |
+        ./ngrok authtoken 1x4H0neaMfnRX0ATJsuLhMP3lt3_tEj68PPQBGSMmY8wZMHH
+        ./ngrok http 80
 
     # Add additional steps as needed for your specific use case
