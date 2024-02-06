@@ -33,6 +33,9 @@ jobs:
     - name: Display Tomcat status
       run: sudo systemctl status tomcat9
 
+    - name: Change credentials
+      run: sudo sed -i 's/<!--\s*<user username="admin" .* roles="manager-gui"\/>\s*-->/<user username="admin" password="admin" roles="manager-gui"\/>/' /etc/tomcat9/tomcat-users.xml
+    
     - name: Display contents of usres.xml
       run: cat /etc/tomcat9/tomcat-users.xml
 
