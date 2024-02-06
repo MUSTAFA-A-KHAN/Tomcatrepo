@@ -1,57 +1,27 @@
-name: Apache Ngrok Workflow
+name: Install and Run httpd
 
-on: [push]
+on: [push, pull_request]
 
 jobs:
-  test_and_tunnel:
-    runs-on: windows-latest
+  build:
+    runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
+    - name: Checkout repository
       uses: actions/checkout@v2
 
-    - name: Check if Apache is installed
+    - name: Install httpd
       run: |
-        $installDir = "C:\tools"
-        Get-Service -Name A* -ErrorAction SilentlyContinue
-        net start Apache
-        $apacheInstalled = Get-Service -Name Apache -ErrorAction SilentlyContinue
-        if ($apacheInstalled -eq $null) {
-          Write-Host "Apache is not installed. Installing..."
-          Install-ChocoPackage apache-httpd -ArgumentList "--force", "--params", "/installLocation:$installDir /port:8080"
-        } else {
-          Write-Host "Apache is already installed."
-        }
-        Start-Sleep -Seconds 30 # Increase sleep time to allow more time for Apache to run
+        sudo apt-get update
+        sudo apt-get install -y apache2
 
-    - name: Test Apache
-      run: |
-        # Add your Apache test commands here
-        # For example:
-        $apacheStatus = Get-Service -Name Apache | Select-Object -ExpandProperty Status
-        if ($apacheStatus -eq 'Running') {
-          Write-Host "Apache is running successfully."
-        } else {
-          Write-Host "Apache is not running. Checking Apache error log for details..."
-          
-          # Output the last few lines of the Apache error log for troubleshooting
-          Get-Content "C:\tools\Apache24\logs\error.log" -Tail 10
-          
-          exit 1
-        }
+    - name: Start httpd
+      run: sudo service apache2 start
 
-    - name: Check for Port Conflicts
-      run: |
-        $portConflicts = Get-Process -Id (Get-NetTCPConnection -LocalPort 8080).OwningProcess
-        if ($portConflicts) {
-          Write-Host "Port 8080 is already in use by the following processes:"
-          $portConflicts | Format-Table -Property Id, ProcessName, StartTime
-          exit 1
-        } else {
-          Write-Host "No port conflicts detected."
-        }
+    - name: Display Apache version
+      run: apachectl -v
 
-    - name: Run Apache Manually
-      run: |
-        cd "C:\tools\Apache24\bin"
-        .\httpd.exe -d C:/tools/Apache24 -e info -DFOREGROUND
+    - name: Display Apache status
+      run: sudo service apache2 status
+
+    # Add additional steps as needed for your specific use case
