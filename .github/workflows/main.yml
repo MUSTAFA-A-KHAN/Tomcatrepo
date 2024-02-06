@@ -38,10 +38,28 @@ jobs:
           exit 1
         }
 
-    - name: Start ngrok and expose Apache port
+    - name: Check for Port Conflicts
       run: |
-        Invoke-WebRequest 'https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-windows-amd64.zip' -OutFile 'ngrok-stable-windows-amd64.zip'
-        Expand-Archive -Path '.\ngrok-stable-windows-amd64.zip' -DestinationPath '.\'
-        java -version
-        .\ngrok authtoken 1x4H0neaMfnRX0ATJsuLhMP3lt3_tEj68PPQBGSMmY8wZMHH
-        .\ngrok.exe http 8080 # Use the port configured for Apache
+        $portConflicts = Get-Process -Id (Get-NetTCPConnection -LocalPort 8080).OwningProcess
+        if ($portConflicts) {
+          Write-Host "Port 8080 is already in use by the following processes:"
+          $portConflicts | Format-Table -Property Id, ProcessName, StartTime
+          exit 1
+        } else {
+          Write-Host "No port conflicts detected."
+        }
+
+    - name: Test Apache Configuration
+      run: |
+        $configTest = "C:\tools\Apache24\bin\httpd.exe" -t
+        if ($LASTEXITCODE -eq 0) {
+          Write-Host "Apache configuration test passed."
+        } else {
+          Write-Host "Apache configuration test failed. Please check the configuration files."
+          exit 1
+        }
+
+    - name: Run Apache Manually
+      run: |
+        cd "C:\tools\Apache24\bin"
+        .\httpd.exe
