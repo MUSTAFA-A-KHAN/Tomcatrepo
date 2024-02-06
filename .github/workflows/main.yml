@@ -40,6 +40,9 @@ jobs:
     - name: Display contents of usres.xml
       run: cat /etc/tomcat9/tomcat-users.xml
 
+    - name: Restart Tomcat
+      run: |
+        sudo systemctl restart tomcat9
     
     - name: Download and extract ngrok
       run: |
