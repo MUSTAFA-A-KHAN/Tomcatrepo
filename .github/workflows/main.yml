@@ -31,7 +31,7 @@ jobs:
             # Check if Tomcat is serving requests
             $response = Invoke-WebRequest -Uri $url -UseBasicParsing -TimeoutSec 5
             echo $response.StatusCode
-            if ($response.StatusCode -eq 200 or $response.StatusCode -eq 401 ) {
+            if ($response.StatusCode -eq 200) {
                 Write-Host "Tomcat has started successfully and is serving requests."
                 break
             } else {
