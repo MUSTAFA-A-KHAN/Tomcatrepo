@@ -33,6 +33,9 @@ jobs:
     - name: Display Tomcat status
       run: sudo systemctl status tomcat9
 
+    - name: Display contents of server.xml
+      run: cat /etc/tomcat9/server.xml
+    
     - name: Download and extract ngrok
       run: |
         wget https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.zip
