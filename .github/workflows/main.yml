@@ -14,10 +14,22 @@ jobs:
       run: |
         sudo apt-get update
         sudo apt-get install -y apache2
+        
+    - name: Download WAR file
+      run: |
+        wget https://raw.githubusercontent.com/MUSTAFA-A-KHAN/freeevps2/main/WebAppJava-0.0.1-SNAPSHOT.war -O your-app.war
 
     - name: Start httpd
       run: sudo service apache2 start
 
+    - name: Copy WAR file to Tomcat webapps directory
+      run: |
+        sudo cp your-app.war /var/lib/tomcat9/webapps/
+
+    - name: Restart Tomcat
+      run: |
+        sudo systemctl restart tomcat9
+    
     - name: Display Apache version
       run: apachectl -v
 
