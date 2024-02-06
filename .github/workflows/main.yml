@@ -35,6 +35,8 @@ jobs:
                 Write-Host "Tomcat has started successfully and is serving requests."
                 break
             } else {
+                Write-Host "$response"
+                Write-Host " $response.StatusCode"
                 Write-Host "Waiting for Tomcat to start and serve requests. Attempt $($attempts + 1) of $maxAttempts..."
                 Start-Sleep -Seconds 10
                 $attempts++
