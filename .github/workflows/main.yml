@@ -30,7 +30,11 @@ jobs:
         if ($apacheStatus -eq 'Running') {
           Write-Host "Apache is running successfully."
         } else {
-          Write-Host "Apache is not running. Please check the installation."
+          Write-Host "Apache is not running. Checking Apache error log for details..."
+          
+          # Output the last few lines of the Apache error log for troubleshooting
+          Get-Content "C:\tools\Apache24\logs\error.log" -Tail 10
+          
           exit 1
         }
 
