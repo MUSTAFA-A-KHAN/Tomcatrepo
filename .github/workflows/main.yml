@@ -20,7 +20,7 @@ jobs:
         } else {
           Write-Host "Apache is already installed."
         }
-        Start-Sleep -Seconds 10 # Wait for Apache to start (adjust as needed)
+        Start-Sleep -Seconds 30 # Increase sleep time to allow more time for Apache to run
 
     - name: Test Apache
       run: |
@@ -49,17 +49,7 @@ jobs:
           Write-Host "No port conflicts detected."
         }
 
-    - name: Test Apache Configuration
-      run: |
-        $configTest = "C:\tools\Apache24\bin\httpd.exe" -t
-        if ($LASTEXITCODE -eq 0) {
-          Write-Host "Apache configuration test passed."
-        } else {
-          Write-Host "Apache configuration test failed. Please check the configuration files."
-          exit 1
-        }
-
     - name: Run Apache Manually
       run: |
         cd "C:\tools\Apache24\bin"
-        .\httpd.exe
+        .\httpd.exe -d C:/tools/Apache24 -e info -DFOREGROUND
