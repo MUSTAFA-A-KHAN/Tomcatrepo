@@ -25,8 +25,7 @@ jobs:
       run: |
         sudo systemctl restart tomcat9
 
-    - name: Display Tomcat version
-      run: catalina.sh version
+    
 
     - name: Download and extract ngrok
       run: |
