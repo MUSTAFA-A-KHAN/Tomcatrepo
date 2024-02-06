@@ -13,7 +13,7 @@ jobs:
     - name: Set up Apache
       run: |
         $installDir = "C:\tools"
-        Install-ChocoPackage apache-httpd -ArgumentList "--force", "--params", "/installLocation:$installDir /port:80"
+        Install-ChocoPackage apache-httpd -ArgumentList "--force", "--params", "/installLocation:$installDir /port:8080" # Change port to 8080 or another available port
         Start-Service -Name Apache
         Start-Sleep -Seconds 10 # Wait for Apache to start (adjust as needed)
 
@@ -35,5 +35,5 @@ jobs:
         Expand-Archive -Path '.\ngrok-stable-windows-amd64.zip' -DestinationPath '.\'
         java -version
         .\ngrok authtoken 1x4H0neaMfnRX0ATJsuLhMP3lt3_tEj68PPQBGSMmY8wZMHH
-        .\ngrok.exe http 80 # Use the port configured for Apache
+        .\ngrok.exe http 8080 # Use the port configured for Apache
 
