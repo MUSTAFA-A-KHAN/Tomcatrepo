@@ -11,7 +11,7 @@ jobs:
     - name: Install Tomcat and JDK
       run: |
         sudo apt-get update
-        sudo apt-get install -y tomcat9 default-jdk
+        sudo apt-get install -y tomcat9 default-jdk tomcat9-admin
 
     - name: Set JAVA_HOME variable
       run: echo "export JAVA_HOME=/usr/lib/jvm/default-java" >> $HOME/.bashrc && source $HOME/.bashrc
