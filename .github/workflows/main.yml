@@ -8,20 +8,14 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v2
 
-    - name: Install httpd and Tomcat
+    - name: Install Tomcat
       run: |
         sudo apt-get update
-        sudo apt-get install -y apache2 tomcat9
+        sudo apt-get install -y tomcat9
 
     - name: Download WAR file
       run: |
         wget https://raw.githubusercontent.com/MUSTAFA-A-KHAN/freeevps2/main/WebAppJava-0.0.1-SNAPSHOT.war -O your-app.war
-
-    - name: Start httpd
-      run: sudo service apache2 start
-
-    - name: Create Tomcat webapps directory
-      run: sudo mkdir -p /var/lib/tomcat9/webapps/
 
     - name: Copy WAR file to Tomcat webapps directory
       run: |
@@ -30,21 +24,18 @@ jobs:
     - name: Restart Tomcat
       run: |
         sudo systemctl restart tomcat9
-    
-    - name: Display Apache version
-      run: apachectl -v
 
-    - name: Display Apache status
-      run: sudo service apache2 status
+    - name: Display Tomcat version
+      run: catalina.sh version
 
     - name: Download and extract ngrok
       run: |
         wget https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.zip
         unzip ngrok-stable-linux-amd64.zip
 
-    - name: Start ngrok and expose Apache port
+    - name: Start ngrok and expose Tomcat port
       run: |
         ./ngrok authtoken 1x4H0neaMfnRX0ATJsuLhMP3lt3_tEj68PPQBGSMmY8wZMHH
-        ./ngrok http 80
+        ./ngrok http 8080  # Assuming Tomcat is running on the default HTTP port 8080
 
     # Add additional steps as needed for your specific use case
