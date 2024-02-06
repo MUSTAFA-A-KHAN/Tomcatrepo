@@ -33,8 +33,9 @@ jobs:
     - name: Display Tomcat status
       run: sudo systemctl status tomcat9
 
-    - name: Display contents of server.xml
-      run: cat /etc/tomcat9/server.xml
+    - name: Display contents of usres.xml
+      run: cat /etc/tomcat9/tomcat-users.xml
+
     
     - name: Download and extract ngrok
       run: |
