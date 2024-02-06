@@ -10,10 +10,16 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Set up Apache
+    - name: Check if Apache is installed
       run: |
         $installDir = "C:\tools"
-        Install-ChocoPackage apache-httpd -ArgumentList "--force", "--params", "/installLocation:$installDir /port:8080" # Change port to 8080 or another available port
+        $apacheInstalled = Get-Service -Name Apache -ErrorAction SilentlyContinue
+        if ($apacheInstalled -eq $null) {
+          Write-Host "Apache is not installed. Installing..."
+          Install-ChocoPackage apache-httpd -ArgumentList "--force", "--params", "/installLocation:$installDir /port:8080"
+        } else {
+          Write-Host "Apache is already installed."
+        }
         Start-Service -Name Apache
         Start-Sleep -Seconds 10 # Wait for Apache to start (adjust as needed)
 
@@ -36,4 +42,3 @@ jobs:
         java -version
         .\ngrok authtoken 1x4H0neaMfnRX0ATJsuLhMP3lt3_tEj68PPQBGSMmY8wZMHH
         .\ngrok.exe http 8080 # Use the port configured for Apache
-
