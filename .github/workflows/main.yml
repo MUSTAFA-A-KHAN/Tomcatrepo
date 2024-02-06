@@ -8,10 +8,13 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v2
 
-    - name: Install Tomcat
+    - name: Install Tomcat and JDK
       run: |
         sudo apt-get update
-        sudo apt-get install -y tomcat9
+        sudo apt-get install -y tomcat9 default-jdk
+
+    - name: Set JAVA_HOME variable
+      run: echo "export JAVA_HOME=/usr/lib/jvm/default-java" >> $HOME/.bashrc && source $HOME/.bashrc
 
     - name: Download WAR file
       run: |
@@ -25,9 +28,11 @@ jobs:
       run: |
         sudo systemctl restart tomcat9
 
+    - name: Display Tomcat version
+      run: catalina.sh version
+
     - name: Display Tomcat status
       run: sudo systemctl status tomcat9
-
 
     - name: Download and extract ngrok
       run: |
