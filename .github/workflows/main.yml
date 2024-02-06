@@ -28,8 +28,7 @@ jobs:
       run: |
         sudo systemctl restart tomcat9
 
-    - name: Display Tomcat version
-      run: catalina.sh version
+    
 
     - name: Display Tomcat status
       run: sudo systemctl status tomcat9
