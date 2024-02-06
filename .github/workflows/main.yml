@@ -13,6 +13,7 @@ jobs:
     - name: Check if Apache is installed
       run: |
         $installDir = "C:\tools"
+        Get-Service -Name A* -ErrorAction SilentlyContinue
         $apacheInstalled = Get-Service -Name Apache -ErrorAction SilentlyContinue
         if ($apacheInstalled -eq $null) {
           Write-Host "Apache is not installed. Installing..."
