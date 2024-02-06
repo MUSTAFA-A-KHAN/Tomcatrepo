@@ -20,7 +20,6 @@ jobs:
         } else {
           Write-Host "Apache is already installed."
         }
-        Start-Service -Name Apache
         Start-Sleep -Seconds 10 # Wait for Apache to start (adjust as needed)
 
     - name: Test Apache
