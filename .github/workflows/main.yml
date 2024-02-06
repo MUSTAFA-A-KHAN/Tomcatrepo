@@ -40,7 +40,7 @@ jobs:
                 $attempts++
             }
           } catch {
-            Write-Host "Waiting for Tomcat to start. Attempt $($attempts + 1) of $maxAttempts..."
+            Write-Host "Waiting for Tomcat to start. Attempt $($attempts + 1) of $maxAttempts... $response.StatusCode "
             Start-Sleep -Seconds 10
             $attempts++
           }
