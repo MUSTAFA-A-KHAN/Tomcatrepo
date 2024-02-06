@@ -27,6 +27,7 @@ jobs:
             # Start Tomcat
             Start-Process -FilePath "D:\a\Tomcatrepo\Tomcatrepo\Tomcat\apache-tomcat-10.0.14\bin\startup.bat" -NoNewWindow -Wait
             Write-Host "Tomcat has started successfully."
+            curl "http://localhost:8080"
 
             # Check if Tomcat is serving requests
             $response = Invoke-WebRequest -Uri $url -UseBasicParsing -TimeoutSec 5
