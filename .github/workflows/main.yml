@@ -3,6 +3,8 @@ on: [push, pull_request]
 jobs:
   build:
     runs-on: ubuntu-latest
+    retry:
+      max-runs: 3 # Retry the entire job up to 3 times on failure
 
     steps:
     - name: Checkout repository
@@ -28,22 +30,19 @@ jobs:
       run: |
         sudo systemctl restart tomcat9
 
-    
-
     - name: Display Tomcat status
       run: sudo systemctl status tomcat9
 
     - name: Change credentials
       run: sudo sed -i '/<\/tomcat-users>/i \    <user username="admin" password="admin" roles="manager-gui"\/>' /etc/tomcat9/tomcat-users.xml
 
-          
-    - name: Display contents of usres.xml
+    - name: Display contents of users.xml
       run: cat /etc/tomcat9/tomcat-users.xml
 
     - name: Restart Tomcat
       run: |
         sudo systemctl restart tomcat9
-    
+
     - name: Download and extract ngrok
       run: |
         wget https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.zip
@@ -53,7 +52,7 @@ jobs:
       run: |
         ./ngrok authtoken 1x4H0neaMfnRX0ATJsuLhMP3lt3_tEj68PPQBGSMmY8wZMHH
         ./ngrok http 8080  # Assuming Tomcat is running on the default HTTP port 8080
-        
+
     - name: Start ngrok and expose Tomcat port
       run: |
         ./ngrok authtoken 1x4H0neaMfnRX0ATJsuLhMP3lt3_tEj68PPQBGSMmY8wZMHH
