@@ -3,8 +3,7 @@ on: [push, pull_request]
 jobs:
   build:
     runs-on: ubuntu-latest
-    retry:
-      max-runs: 3 # Retry the entire job up to 3 times on failure
+    
 
     steps:
     - name: Checkout repository
@@ -51,7 +50,7 @@ jobs:
     - name: Start ngrok and expose Tomcat port
       run: |
         ./ngrok authtoken 1x4H0neaMfnRX0ATJsuLhMP3lt3_tEj68PPQBGSMmY8wZMHH
-        ./ngrok http 8080  # Assuming Tomcat is running on the default HTTP port 8080
+        ./ngrok http 8080 || echo "retry" # Assuming Tomcat is running on the default HTTP port 8080
 
     - name: Start ngrok and expose Tomcat port
       run: |
