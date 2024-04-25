@@ -43,6 +43,9 @@ jobs:
       run: |
         sudo systemctl restart tomcat9
 
+    - name: snap install
+      run: sudo snap install ngrok
+
     - name: Download and extract ngrok
       run: |
         wget https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.zip
