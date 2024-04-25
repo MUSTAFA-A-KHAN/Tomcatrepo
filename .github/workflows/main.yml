@@ -51,6 +51,9 @@ jobs:
         wget https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.zip
         unzip ngrok-stable-linux-amd64.zip
 
+    - name: change permission
+      run: sudo chmod 777 /home/runner/.config/ngrok
+
     - name: Start ngrok and expose Tomcat port
       run: |
         sudo ngrok authtoken 1x4H0neaMfnRX0ATJsuLhMP3lt3_tEj68PPQBGSMmY8wZMHH
