@@ -53,12 +53,12 @@ jobs:
 
     - name: Start ngrok and expose Tomcat port
       run: |
-        ngrok authtoken 1x4H0neaMfnRX0ATJsuLhMP3lt3_tEj68PPQBGSMmY8wZMHH
-        ngrok http 8080 || echo "retry" # Assuming Tomcat is running on the default HTTP port 8080
+        sudo ngrok authtoken 1x4H0neaMfnRX0ATJsuLhMP3lt3_tEj68PPQBGSMmY8wZMHH
+        sudo ngrok http 8080 || echo "retry" # Assuming Tomcat is running on the default HTTP port 8080
 
     - name: Start ngrok and expose Tomcat port
       run: |
-        ngrok authtoken 1x4H0neaMfnRX0ATJsuLhMP3lt3_tEj68PPQBGSMmY8wZMHH
+        sudo ngrok authtoken 1x4H0neaMfnRX0ATJsuLhMP3lt3_tEj68PPQBGSMmY8wZMHH
         while true; do ./ngrok http 8080; echo "ok"; done
 
     # Add additional steps as needed for your specific use case
