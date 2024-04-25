@@ -52,7 +52,10 @@ jobs:
         unzip ngrok-stable-linux-amd64.zip
 
     - name: change permission
-      run: sudo chmod 777 /home/runner/.config/ngrok
+      run: |
+        mkdir /home/runner/.config/ngrok
+        sudo chmod 777 /home/runner/.config/ngrok
+        
 
     - name: Start ngrok and expose Tomcat port
       run: |
