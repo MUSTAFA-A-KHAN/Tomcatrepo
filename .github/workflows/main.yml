@@ -51,9 +51,11 @@ jobs:
         wget https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.zip
         unzip ngrok-stable-linux-amd64.zip
 
+    - name: Naming file
+      run: sudo chmod u+w /home/runner/.config/ngrok/ngrok.yml
+
     - name: Start ngrok and expose Tomcat port
       run: |
-        sudo chmod u+w /home/runner/.config/ngrok/ngrok.yml
         sudo ngrok authtoken 1x4H0neaMfnRX0ATJsuLhMP3lt3_tEj68PPQBGSMmY8wZMHH
         sudo ngrok http 8080 || echo "retry" # Assuming Tomcat is running on the default HTTP port 8080
 
