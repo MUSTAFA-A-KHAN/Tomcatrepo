@@ -44,7 +44,7 @@ jobs:
         sudo systemctl restart tomcat9
 
     - name: snap install
-      run: snap install ngrok
+      run: sudo snap install ngrok
 
     - name: Download and extract ngrok
       run: |
