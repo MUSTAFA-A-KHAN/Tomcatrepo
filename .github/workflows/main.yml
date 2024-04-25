@@ -44,15 +44,12 @@ jobs:
         sudo systemctl restart tomcat9
 
     - name: snap install
-      run: sudo snap install ngrok
+      run: snap install ngrok
 
     - name: Download and extract ngrok
       run: |
         wget https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.zip
         unzip ngrok-stable-linux-amd64.zip
-
-    - name: Naming file
-      run: sudo chmod u+w /home/runner/.config/ngrok/ngrok.yml
 
     - name: Start ngrok and expose Tomcat port
       run: |
